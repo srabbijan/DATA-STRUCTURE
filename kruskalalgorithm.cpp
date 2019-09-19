@@ -1,61 +1,64 @@
 #include<bits/stdc++.h>
 using namespace std;
-#define v 4
-int parent[v];
-int finding(int);
-int uni(int ,int);
+int r[10000],v[10000];
+int n,p[100000],m,x,y,l,s=0,z;
+void parent(int n)
+{
+    for(int i=0; i<n; i++)
+    {
+        p[i]=i;
+    }
+}
+struct abc
+{
+    int u,v,w;
+} ;
+abc e[1000];
+int rcheck(int a)
+{
+    if(p[a]!=a)
+    {
+        return p[a]=rcheck(p[a]);
+    }
+    else
+    {
+        return a;
+    }
+}
+bool compare(abc a,abc b)
+{
+    return a.w<b.w;
+}
+int fun(int n)
+{
+    sort(e,e+n,compare);
+    for(int i=0; i<n; i++)
+    {
+        int px=rcheck(e[i].u);
+        int py=rcheck(e[i].v);
+        if(px!=py)
+        {
+            p[py]=px;
+            cout<<"n ="<<e[i].w<<endl;
+            s+=e[i].w;
+        }
+    }
+    return s;
+}
 int main()
 {
-    int g[v][v],mini=9999,k=0,cost=0,i,j,a,b,u,v1;
-    cout<<"Enter the graph graph\n";
-    for(i=0;i<v;i++)
-    {
-        for(j=0;j<v;j++)
-        {
-            cin>>g[i][j];
-            if(g[i][j]==0)
-                g[i][j]=9999;
-        }
-    }
-    for(;k<v-1;){
-            mini=9999;
-    for(i=0;i<v;i++)
-    {
-        for(j=0;j<v;j++)
-        {
-            if(g[i][j]<mini)
-            {
-                mini=g[i][j];
-                a=u=i;b=v1=j;
-            }
-        }
-    }
-    u=finding(u);
-    v1=finding(v1);
-    if(uni(u,v1))
-       {
-           cout<<a<<"to"<<b<<"="<<mini<<"\n";
-           cost+=mini;
-           k++;
-       }
-        g[a][b]=g[b][a]=9999;
-}
-       cout<<"\n"<<cost;
-    return 0;
-}
-int finding(int i)
-{
-    while(parent[i])
-        i=parent[i];
-    return i;
-}
-int uni(int i,int j)
-{
-    if(i!=j)
-    {
-        parent[j]=i;
-        return 1;
-    }
-    return 0;
-}
+    scanf("%d",&n);
+    scanf("%d",&m);
+    parent(n);
 
+    for(int i=0; i<m; i++)
+    {
+        cin>>x>>y>>z;
+        e[i].u=x;
+        e[i].v=y;
+        e[i].w=z;
+    }
+    fun(m);
+    cout<<s;
+    return 0;
+}
